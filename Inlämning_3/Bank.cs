@@ -8,8 +8,14 @@ namespace ImperativeToObjectOriented
 {
     public class Account
     {
-        public string Name;
-        public decimal Balance;
+        public string Name { get; set; }
+        public decimal Balance { get; set; }
+
+        public Account (string name, decimal balance)
+        {
+            Name = name;
+            Balance = balance;
+        }
 
         public void Deposit(decimal amount)
         {
@@ -28,12 +34,12 @@ namespace ImperativeToObjectOriented
                 Console.WriteLine("Balance too low to withdraw");
             }
         }
-        public void Transfer(decimal amount) //Osäker
+        public void Transfer(Account toAccount, decimal amount)
         {
             if (Balance >= amount)
             {
                 Withdraw(amount);
-                Deposit(amount);
+                toAccount.Deposit(amount);
                 Console.WriteLine(amount + " kr transfered from " + Name + " to " + Name);
             }
             else
@@ -73,9 +79,16 @@ namespace ImperativeToObjectOriented
 
     public class Share
     {
-        public string Company;
-        public int Amount;
-        public decimal Price;
+        public string Company { get; set; }
+        public int Amount { get; set; }
+        public decimal Price { get; set; }
+
+        public Share(string name, int amount, decimal price)
+        {
+            Company = name;
+            Amount = amount;
+            Price = price;
+        }
     }
 
     public class Bank
@@ -109,6 +122,99 @@ namespace ImperativeToObjectOriented
             {
                 Console.WriteLine("- " + share.Company + " (" + share.Amount + " at " + share.Price + " kr)");
             }
+        }
+        public static void DepositPage()
+        {
+            int accountIndex = ShowAccountMenu("Select account to deposit into:");
+            Account account = accounts[accountIndex];
+            Console.WriteLine();
+
+            Console.Write("Select amount to deposit: ");
+            decimal amount = decimal.Parse(Console.ReadLine());
+
+            Console.Clear();
+            account.Deposit(amount);
+        }
+        public static void WithdrawPage()
+        {
+            int accountIndex = ShowAccountMenu("Select account to withdraw from:");
+            Account account = accounts[accountIndex];
+            Console.WriteLine();
+
+            Console.Write("Select amount: ");
+            decimal amount = decimal.Parse(Console.ReadLine());
+
+            Console.Clear();
+            account.Withdraw(amount);
+        }
+        public static void TransferPage()
+        {
+            int fromIndex = ShowAccountMenu("Select account to transfer from:");
+            Account fromAccount = accounts[fromIndex];
+            Console.WriteLine();
+
+            int toIndex = ShowAccountMenu("Select account to transfer to:");
+            Account toAccount = accounts[toIndex];
+            Console.WriteLine();
+
+            Console.Write("Select amount: ");
+            decimal amount = decimal.Parse(Console.ReadLine());
+
+            Console.Clear();
+            fromAccount.Transfer(amount);
+            toAccount.Transfer(amount);
+        }
+        public static void BuySharePage()
+        {
+            int shareIndex = ShowShareMenu("Select share to buy:");
+            Share share = shares[shareIndex];
+            Console.WriteLine();
+
+            Console.Write("Select amount to buy: ");
+            int shareAmount = int.Parse(Console.ReadLine());
+
+            int accountIndex = ShowAccountMenu("Select account to buy with:");
+            Account account = accounts[accountIndex];
+
+            Console.Clear();
+            account.BuyShare(share, shareAmount);
+        }
+        public static void SellSharePage()
+        {
+            int shareIndex = ShowShareMenu("Select share to sell:");
+            Share share = shares[shareIndex];
+            Console.WriteLine();
+
+            Console.Write("Select amount to sell: ");
+            int shareAmount = int.Parse(Console.ReadLine());
+            Console.WriteLine();
+
+            int accountIndex = ShowAccountMenu("Select account to deposit into:");
+            Account account = accounts[accountIndex];
+
+            Console.Clear();
+            account.SellShare(share, shareAmount);
+        }
+        public static int ShowAccountMenu(string prompt)
+        {
+            List<string> options = new List<string>();
+            foreach (Account account in accounts)
+            {
+                options.Add(account.Name + " (" + account.Balance + " kr)");
+            }
+
+            return ShowMenu(prompt, options);
+        }
+
+        public static int ShowShareMenu(string prompt)
+        {
+            List<string> options = new List<string>();
+            foreach (Share share in shares)
+            {
+                options.Add(share.Company + " (" + share.Amount + " at " + share.Price + " kr)");
+            }
+
+            return ShowMenu(prompt, options);
         }
 
         public static void Main()
@@ -161,117 +267,6 @@ namespace ImperativeToObjectOriented
                 Console.WriteLine();
             }
         }
-
-        
-
-        public static void DepositPage()
-        {
-            int accountIndex = ShowAccountMenu("Select account to deposit into:");
-            Account account = accounts[accountIndex];
-            Console.WriteLine();
-
-            Console.Write("Select amount to deposit: ");
-            decimal amount = decimal.Parse(Console.ReadLine());
-
-            Console.Clear();
-            account.Deposit(amount);
-        }
-
-        public static void WithdrawPage()
-        {
-            int accountIndex = ShowAccountMenu("Select account to withdraw from:");
-            Account account = accounts[accountIndex];
-            Console.WriteLine();
-
-            Console.Write("Select amount: ");
-            decimal amount = decimal.Parse(Console.ReadLine());
-
-            Console.Clear();
-            account.Withdraw(amount);
-        }
-
-        public static void TransferPage()
-        {
-            int fromIndex = ShowAccountMenu("Select account to transfer from:");
-            Account fromAccount = accounts[fromIndex];
-            Console.WriteLine();
-
-            int toIndex = ShowAccountMenu("Select account to transfer to:");
-            Account toAccount = accounts[toIndex];
-            Console.WriteLine();
-
-            Console.Write("Select amount: ");
-            decimal amount = decimal.Parse(Console.ReadLine());
-
-            Console.Clear();
-            fromAccount.Transfer(amount);
-            toAccount.Transfer(amount);
-        }
-
-        public static void BuySharePage()
-        {
-            int shareIndex = ShowShareMenu("Select share to buy:");
-            Share share = shares[shareIndex];
-            Console.WriteLine();
-
-            Console.Write("Select amount to buy: ");
-            int shareAmount = int.Parse(Console.ReadLine());
-
-            int accountIndex = ShowAccountMenu("Select account to buy with:");
-            Account account = accounts[accountIndex];
-
-            Console.Clear();
-            account.BuyShare(share, shareAmount);
-        }
-
-        public static void SellSharePage()
-        {
-            int shareIndex = ShowShareMenu("Select share to sell:");
-            Share share = shares[shareIndex];
-            Console.WriteLine();
-
-            Console.Write("Select amount to sell: ");
-            int shareAmount = int.Parse(Console.ReadLine());
-            Console.WriteLine();
-
-            int accountIndex = ShowAccountMenu("Select account to deposit into:");
-            Account account = accounts[accountIndex];
-
-            Console.Clear();
-            account.SellShare(share, shareAmount);
-        }
-
-        public static int ShowAccountMenu(string prompt)
-        {
-            List<string> options = new List<string>();
-            foreach (Account account in accounts)
-            {
-                options.Add(account.Name + " (" + account.Balance + " kr)");
-            }
-
-            return ShowMenu(prompt, options);
-        }
-
-        public static int ShowShareMenu(string prompt)
-        {
-            List<string> options = new List<string>();
-            foreach (Share share in shares)
-            {
-                options.Add(share.Company + " (" + share.Amount + " at " + share.Price + " kr)");
-            }
-
-            return ShowMenu(prompt, options);
-        }
-
-        
-
-        
-
-        
-
-        
-
-        
 
         public static int ShowMenu(string prompt, IEnumerable<string> options)
         {
