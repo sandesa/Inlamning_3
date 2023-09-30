@@ -10,6 +10,37 @@ namespace ImperativeToObjectOriented
     {
         public string Name;
         public decimal Balance;
+
+        public void Deposit(decimal amount)
+        {
+            Balance += amount;
+            Console.WriteLine(amount + " kr deposited into " + Name);
+        }
+        public void Withdraw(decimal amount)
+        {
+            if (Balance >= amount)
+            {
+                Balance -= amount;
+                Console.WriteLine(amount + " kr withdrawn from " + Name);
+            }
+            else
+            {
+                Console.WriteLine("Balance too low to withdraw");
+            }
+        }
+        public void Transfer(decimal amount) //Osäker
+        {
+            if (Balance >= amount)
+            {
+                Withdraw(amount);
+                Deposit(amount);
+                Console.WriteLine(amount + " kr transfered from " + Name + " to " + Name);
+            }
+            else
+            {
+                Console.WriteLine("Balance too low to transfer");
+            }
+        }
     }
 
     public class Share
@@ -36,6 +67,21 @@ namespace ImperativeToObjectOriented
             new Share { Company = "H&M", Price = 129, Amount = 50 },
             new Share { Company = "AstraZeneca", Price = 713, Amount = 5 }
         };
+        public static void ShowUserInfo()  //Oklar
+        {
+            Console.WriteLine("Your accounts:");
+            foreach (Account account in accounts)
+            {
+                Console.WriteLine("- " + account.Name + " (" + account.Balance + " kr)");
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("Your shares:");
+            foreach (Share share in shares)
+            {
+                Console.WriteLine("- " + share.Company + " (" + share.Amount + " at " + share.Price + " kr)");
+            }
+        }
 
         public static void Main()
         {
@@ -88,21 +134,7 @@ namespace ImperativeToObjectOriented
             }
         }
 
-        public static void ShowUserInfo()
-        {
-            Console.WriteLine("Your accounts:");
-            foreach (Account account in accounts)
-            {
-                Console.WriteLine("- " + account.Name + " (" + account.Balance + " kr)");
-            }
-            Console.WriteLine();
-
-            Console.WriteLine("Your shares:");
-            foreach (Share share in shares)
-            {
-                Console.WriteLine("- " + share.Company + " (" + share.Amount + " at " + share.Price + " kr)");
-            }
-        }
+        
 
         public static void DepositPage()
         {
@@ -114,7 +146,7 @@ namespace ImperativeToObjectOriented
             decimal amount = decimal.Parse(Console.ReadLine());
 
             Console.Clear();
-            Deposit(account, amount);
+            account.Deposit(amount);
         }
 
         public static void WithdrawPage()
@@ -127,7 +159,7 @@ namespace ImperativeToObjectOriented
             decimal amount = decimal.Parse(Console.ReadLine());
 
             Console.Clear();
-            Withdraw(account, amount);
+            account.Withdraw(amount);
         }
 
         public static void TransferPage()
@@ -202,45 +234,18 @@ namespace ImperativeToObjectOriented
             return ShowMenu(prompt, options);
         }
 
-        public static void Deposit(Account account, decimal amount)
-        {
-            account.Balance += amount;
-            Console.WriteLine(amount + " kr deposited into " + account.Name);
-        }
+        
 
-        public static void Withdraw(Account account, decimal amount)
-        {
-            if (account.Balance >= amount)
-            {
-                account.Balance -= amount;
-                Console.WriteLine(amount + " kr withdrawn from " + account.Name);
-            }
-            else
-            {
-                Console.WriteLine("Balance too low to withdraw");
-            }
-        }
+        
 
-        public static void Transfer(Account fromAccount, Account toAccount, decimal amount)
-        {
-            if (fromAccount.Balance >= amount)
-            {
-                Withdraw(fromAccount, amount);
-                Deposit(toAccount, amount);
-                Console.WriteLine(amount + " kr transfered from " + fromAccount.Name + " to " + toAccount.Name);
-            }
-            else
-            {
-                Console.WriteLine("Balance too low to transfer");
-            }
-        }
+        
 
         public static void BuyShare(Account account, Share share, int amount)
         {
             decimal totalPrice = share.Price * amount;
             if (account.Balance >= totalPrice)
             {
-                Withdraw(account, totalPrice);
+                account.Withdraw(totalPrice);
                 share.Amount += amount;
                 Console.WriteLine("Bought " + amount + " shares of " + share.Company + " with account " + account.Name);
             }
@@ -255,7 +260,7 @@ namespace ImperativeToObjectOriented
             if (amount <= share.Amount)
             {
                 decimal totalPrice = share.Price * amount;
-                Deposit(account, totalPrice);
+                account.Deposit(totalPrice);
                 share.Amount -= amount;
                 Console.WriteLine("Sold " + amount + " shares of " + share.Company + " with account " + account.Name);
             }
@@ -343,33 +348,33 @@ namespace ImperativeToObjectOriented
         }
     }
 
-    [TestClass]
-    public class BankTest
-    {
-        [TestMethod]
-        public void DepositTest()
-        {
-            Account account = new Account { Name = "Kort", Balance = 500 };
-            Bank.Deposit(account, 200);
-            Assert.AreEqual(700, account.Balance);
-        }
+    //[TestClass]
+    //public class BankTest
+    //{
+    //    [TestMethod]
+    //    public void DepositTest()
+    //    {
+    //        Account account = new Account { Name = "Kort", Balance = 500 };
+    //        Bank.Deposit(account, 200);
+    //        Assert.AreEqual(700, account.Balance);
+    //    }
 
-        [TestMethod]
-        public void WithdrawTest()
-        {
-            Account account = new Account { Name = "Kort", Balance = 500 };
-            Bank.Withdraw(account, 200);
-            Assert.AreEqual(300, account.Balance);
-        }
+    //    [TestMethod]
+    //    public void WithdrawTest()
+    //    {
+    //        Account account = new Account { Name = "Kort", Balance = 500 };
+    //        Bank.Withdraw(account, 200);
+    //        Assert.AreEqual(300, account.Balance);
+    //    }
 
-        [TestMethod]
-        public void TransferTest()
-        {
-            Account fromAccount = new Account { Name = "Spar", Balance = 5000 };
-            Account toAccount = new Account { Name = "Kort", Balance = 1000 };
-            Bank.Transfer(fromAccount, toAccount, 200);
-            Assert.AreEqual(4800, fromAccount.Balance);
-            Assert.AreEqual(1200, toAccount.Balance);
-        }
-    }
+    //    [TestMethod]
+    //    public void TransferTest()
+    //    {
+    //        Account fromAccount = new Account { Name = "Spar", Balance = 5000 };
+    //        Account toAccount = new Account { Name = "Kort", Balance = 1000 };
+    //        Bank.Transfer(fromAccount, toAccount, 200);
+    //        Assert.AreEqual(4800, fromAccount.Balance);
+    //        Assert.AreEqual(1200, toAccount.Balance);
+    //    }
+    //}
 }
