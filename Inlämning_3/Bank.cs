@@ -41,6 +41,34 @@ namespace ImperativeToObjectOriented
                 Console.WriteLine("Balance too low to transfer");
             }
         }
+        public void BuyShare(Share share, int amount)
+        {
+            decimal totalPrice = share.Price * amount;
+            if (Balance >= totalPrice)
+            {
+                Withdraw(totalPrice);
+                share.Amount += amount;
+                Console.WriteLine("Bought " + amount + " shares of " + share.Company + " with account " + Name);
+            }
+            else
+            {
+                Console.WriteLine("Balance too low to buy shares");
+            }
+        }
+        public void SellShare(Share share, int amount)
+        {
+            if (amount <= share.Amount)
+            {
+                decimal totalPrice = share.Price * amount;
+                Deposit(totalPrice);
+                share.Amount -= amount;
+                Console.WriteLine("Sold " + amount + " shares of " + share.Company + " with account " + Name);
+            }
+            else
+            {
+                Console.WriteLine("Number of shares too low to sell");
+            }
+        }
     }
 
     public class Share
@@ -176,7 +204,8 @@ namespace ImperativeToObjectOriented
             decimal amount = decimal.Parse(Console.ReadLine());
 
             Console.Clear();
-            Transfer(fromAccount, toAccount, amount);
+            fromAccount.Transfer(amount);
+            toAccount.Transfer(amount);
         }
 
         public static void BuySharePage()
@@ -192,7 +221,7 @@ namespace ImperativeToObjectOriented
             Account account = accounts[accountIndex];
 
             Console.Clear();
-            BuyShare(account, share, shareAmount);
+            account.BuyShare(share, shareAmount);
         }
 
         public static void SellSharePage()
@@ -209,7 +238,7 @@ namespace ImperativeToObjectOriented
             Account account = accounts[accountIndex];
 
             Console.Clear();
-            SellShare(account, share, shareAmount);
+            account.SellShare(share, shareAmount);
         }
 
         public static int ShowAccountMenu(string prompt)
@@ -240,35 +269,9 @@ namespace ImperativeToObjectOriented
 
         
 
-        public static void BuyShare(Account account, Share share, int amount)
-        {
-            decimal totalPrice = share.Price * amount;
-            if (account.Balance >= totalPrice)
-            {
-                account.Withdraw(totalPrice);
-                share.Amount += amount;
-                Console.WriteLine("Bought " + amount + " shares of " + share.Company + " with account " + account.Name);
-            }
-            else
-            {
-                Console.WriteLine("Balance too low to buy shares");
-            }
-        }
+        
 
-        public static void SellShare(Account account, Share share, int amount)
-        {
-            if (amount <= share.Amount)
-            {
-                decimal totalPrice = share.Price * amount;
-                account.Deposit(totalPrice);
-                share.Amount -= amount;
-                Console.WriteLine("Sold " + amount + " shares of " + share.Company + " with account " + account.Name);
-            }
-            else
-            {
-                Console.WriteLine("Number of shares too low to sell");
-            }
-        }
+        
 
         public static int ShowMenu(string prompt, IEnumerable<string> options)
         {
