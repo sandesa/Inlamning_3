@@ -16,11 +16,7 @@ namespace ImperativeToFunctional
 
     public class Cities
     {
-        public static void Run()
-        {
-            // No main method for this program. Check the rest of the code for the relevant parts.
-        }
-
+        
         public static int HighestPopulation(City[] cities)
         {
             var highestPopulation = cities.OrderByDescending(c => c.Population).First().Population;
@@ -50,9 +46,8 @@ namespace ImperativeToFunctional
         // If multiple cities have the same age, those should be sorted alphabetically by name (A-Z).
         public static City[] CitiesSortedByByAgeAndName(City[] cities)
         {
-            var sorted = cities.OrderBy(c => c.Founded).ThenByDescending(c => c.Name[0]).Reverse().ToArray();
-
-            return sorted;
+            var citiesSortedByAgeAndName = cities.OrderBy(c => c.Founded).ThenByDescending(c => c.Name[0]).Reverse().ToArray();
+            return citiesSortedByAgeAndName;
         }
     }
 
