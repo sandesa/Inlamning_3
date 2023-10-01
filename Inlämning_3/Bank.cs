@@ -37,6 +37,22 @@ namespace ImperativeToObjectOriented
             new Share { Company = "AstraZeneca", Price = 713, Amount = 5 }
         };
 
+        public static void ShowUserInfo()
+        {
+            Console.WriteLine("Your accounts:");
+            foreach (Account account in accounts)
+            {
+                Console.WriteLine("- " + account.Name + " (" + account.Balance + " kr)");
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("Your shares:");
+            foreach (Share share in shares)
+            {
+                Console.WriteLine("- " + share.Company + " (" + share.Amount + " at " + share.Price + " kr)");
+            }
+        }
+
         public static void Main()
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
@@ -88,21 +104,7 @@ namespace ImperativeToObjectOriented
             }
         }
 
-        public static void ShowUserInfo()
-        {
-            Console.WriteLine("Your accounts:");
-            foreach (Account account in accounts)
-            {
-                Console.WriteLine("- " + account.Name + " (" + account.Balance + " kr)");
-            }
-            Console.WriteLine();
-
-            Console.WriteLine("Your shares:");
-            foreach (Share share in shares)
-            {
-                Console.WriteLine("- " + share.Company + " (" + share.Amount + " at " + share.Price + " kr)");
-            }
-        }
+        
 
         public static void DepositPage()
         {
