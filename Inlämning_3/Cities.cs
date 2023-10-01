@@ -46,7 +46,7 @@ namespace ImperativeToFunctional
         // If multiple cities have the same age, those should be sorted alphabetically by name (A-Z).
         public static City[] CitiesSortedByByAgeAndName(City[] cities)
         {
-            var citiesSortedByAgeAndName = cities.OrderBy(c => c.Founded).ThenByDescending(c => c.Name[0]).Reverse().ToArray();
+            var citiesSortedByAgeAndName = cities.OrderByDescending(c => c.Founded).ThenBy(c => c.Name[0]).ToArray();
             return citiesSortedByAgeAndName;
         }
     }
