@@ -8,14 +8,14 @@ namespace ImperativeToObjectOriented
 {
     public class Account
     {
-        public string Name { get; set; }
-        public decimal Balance { get; set; }
+        public string Name;
+        public decimal Balance;
 
-        public Account (string name, decimal balance)
-        {
-            Name = name;
-            Balance = balance;
-        }
+        //public Account (string name, decimal balance)
+        //{
+        //    Name = name;
+        //    Balance = balance;
+        //}
 
         public void Deposit(decimal amount)
         {
@@ -34,12 +34,12 @@ namespace ImperativeToObjectOriented
                 Console.WriteLine("Balance too low to withdraw");
             }
         }
-        public void Transfer(Account toAccount, decimal amount)
+        public void Transfer(Account fromAccount, decimal amount)
         {
             if (Balance >= amount)
             {
-                Withdraw(amount);
-                toAccount.Deposit(amount);
+                fromAccount.Withdraw(amount);
+                Deposit(amount);
                 Console.WriteLine(amount + " kr transfered from " + Name + " to " + Name);
             }
             else
@@ -79,16 +79,16 @@ namespace ImperativeToObjectOriented
 
     public class Share
     {
-        public string Company { get; set; }
-        public int Amount { get; set; }
-        public decimal Price { get; set; }
+        public string Company;
+        public int Amount;
+        public decimal Price;
 
-        public Share(string name, int amount, decimal price)
-        {
-            Company = name;
-            Amount = amount;
-            Price = price;
-        }
+        //public Share(string name, int amount, decimal price)
+        //{
+        //    Company = name;
+        //    Amount = amount;
+        //    Price = price;
+        //}
     }
 
     public class Bank
@@ -161,8 +161,7 @@ namespace ImperativeToObjectOriented
             decimal amount = decimal.Parse(Console.ReadLine());
 
             Console.Clear();
-            fromAccount.Transfer(amount);
-            toAccount.Transfer(amount);
+            fromAccount.Transfer(fromAccount,amount);
         }
         public static void BuySharePage()
         {
