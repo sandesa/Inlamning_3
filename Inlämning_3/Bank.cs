@@ -76,7 +76,6 @@ namespace ImperativeToObjectOriented
         public string Company;
         public int Amount;
         public decimal Price;
-
     }
 
     public class Bank
@@ -96,6 +95,58 @@ namespace ImperativeToObjectOriented
             new Share { Company = "H&M", Price = 129, Amount = 50 },
             new Share { Company = "AstraZeneca", Price = 713, Amount = 5 }
         };
+
+        public static void Main()
+        {
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
+            bool done = false;
+            while (!done)
+            {
+                ShowUserInfo();
+                Console.WriteLine();
+
+                int option = ShowMenu("What do you want to do?", new[]
+                {
+                    "Deposit",
+                    "Withdraw",
+                    "Transfer",
+                    "Buy shares",
+                    "Sell shares",
+                    "Exit"
+                });
+                Console.Clear();
+
+                // Call one of the "Page" methods based on which option the user picks.
+                if (option == 0)
+                {
+                    DepositPage();
+                }
+                else if (option == 1)
+                {
+                    WithdrawPage();
+                }
+                else if (option == 2)
+                {
+                    TransferPage();
+                }
+                else if (option == 3)
+                {
+                    BuySharePage();
+                }
+                else if (option == 4)
+                {
+                    SellSharePage();
+                }
+                else if (option == 5)
+                {
+                    done = true;
+                }
+
+                Console.WriteLine();
+            }
+        }
+
         public static void ShowUserInfo()  //Oklar
         {
             Console.WriteLine("Your accounts:");
@@ -182,6 +233,7 @@ namespace ImperativeToObjectOriented
             Console.Clear();
             account.SellShare(share, shareAmount);
         }
+
         public static int ShowAccountMenu(string prompt)
         {
             List<string> options = new List<string>();
@@ -192,7 +244,6 @@ namespace ImperativeToObjectOriented
 
             return ShowMenu(prompt, options);
         }
-
         public static int ShowShareMenu(string prompt)
         {
             List<string> options = new List<string>();
@@ -202,57 +253,6 @@ namespace ImperativeToObjectOriented
             }
 
             return ShowMenu(prompt, options);
-        }
-
-        public static void Main()
-        {
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-
-            bool done = false;
-            while (!done)
-            {
-                ShowUserInfo();
-                Console.WriteLine();
-
-                int option = ShowMenu("What do you want to do?", new[]
-                {
-                    "Deposit",
-                    "Withdraw",
-                    "Transfer",
-                    "Buy shares",
-                    "Sell shares",
-                    "Exit"
-                });
-                Console.Clear();
-
-                // Call one of the "Page" methods based on which option the user picks.
-                if (option == 0)
-                {
-                    DepositPage();
-                }
-                else if (option == 1)
-                {
-                    WithdrawPage();
-                }
-                else if (option == 2)
-                {
-                    TransferPage();
-                }
-                else if (option == 3)
-                {
-                    BuySharePage();
-                }
-                else if (option == 4)
-                {
-                    SellSharePage();
-                }
-                else if (option == 5)
-                {
-                    done = true;
-                }
-
-                Console.WriteLine();
-            }
         }
 
         public static int ShowMenu(string prompt, IEnumerable<string> options)
