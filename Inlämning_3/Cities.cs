@@ -23,59 +23,26 @@ namespace ImperativeToFunctional
 
         public static int HighestPopulation(City[] cities)
         {
-            int highestPopulation = cities[0].Population;
-            foreach (City city in cities)
-            {
-                if (city.Population > highestPopulation)
-                {
-                    highestPopulation = city.Population;
-                }
-            }
+            var highestPopulation = cities.OrderByDescending(c => c.Population).First().Population;
             return highestPopulation;
         }
 
         public static int EarliestFounding(City[] cities)
         {
-            int earliestFounding = cities[0].Founded;
-            foreach (City city in cities)
-            {
-                if (city.Founded < earliestFounding)
-                {
-                    earliestFounding = city.Founded;
-                }
-            }
+            var earliestFounding = cities.OrderBy(c => c.Founded).First().Founded;
             return earliestFounding;
         }
 
         public static double AveragePopulationDensity(City[] cities)
         {
-            double totalPopulationDensity = 0;
-            foreach (City city in cities)
-            {
-                totalPopulationDensity += city.Population / city.Area;
-            }
-            double averagePopulationDensity = Math.Round(totalPopulationDensity / cities.Length);
+            var averagePopulationDensity = Math.Round(cities.Average(c => c.Population / c.Area));
             return averagePopulationDensity;
         }
 
         public static string[] LongCityNames(City[] cities)
         {
-            List<City> longNameCities = new List<City>();
-            foreach (City city in cities)
-            {
-                if (city.Name.Length > 6)
-                {
-                    longNameCities.Add(city);
-                }
-            }
-
-            List<string> longNames = new List<string>();
-            foreach (City city in longNameCities)
-            {
-                longNames.Add(city.Name);
-            }
-
-            return longNames.ToArray();
+            var longCityNames = cities.Where(c => c.Name.Length > 6).Select(c => c.Name).ToArray();
+            return longCityNames;
         }
 
         // NOTE: This method still needs to be implemented.
@@ -83,8 +50,9 @@ namespace ImperativeToFunctional
         // If multiple cities have the same age, those should be sorted alphabetically by name (A-Z).
         public static City[] CitiesSortedByByAgeAndName(City[] cities)
         {
-            // Put your own code here instead of the following line.
-            return cities;
+            var sorted = cities.OrderBy(c => c.Founded).ThenByDescending(c => c.Name[0]).Reverse().ToArray();
+
+            return sorted;
         }
     }
 
