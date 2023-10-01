@@ -16,7 +16,7 @@ namespace ImperativeToFunctional
 
     public class Cities
     {
-        public static void Main()
+        public static void Run()
         {
             // No main method for this program. Check the rest of the code for the relevant parts.
         }
