@@ -147,7 +147,7 @@ namespace ImperativeToObjectOriented
             }
         }
 
-        public static void ShowUserInfo()  //Oklar
+        public static void ShowUserInfo()
         {
             Console.WriteLine("Your accounts:");
             foreach (Account account in accounts)
