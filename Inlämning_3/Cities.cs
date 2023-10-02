@@ -19,13 +19,13 @@ namespace ImperativeToFunctional
         
         public static int HighestPopulation(City[] cities)
         {
-            var highestPopulation = cities.OrderByDescending(c => c.Population).First().Population;
+            var highestPopulation = cities.Max(c => c.Population);
             return highestPopulation;
         }
 
         public static int EarliestFounding(City[] cities)
         {
-            var earliestFounding = cities.OrderBy(c => c.Founded).First().Founded;
+            var earliestFounding = cities.Min(c =>  c.Founded);
             return earliestFounding;
         }
 
